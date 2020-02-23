@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ado-agent-dev
+  namespace: ado-agent
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ado-dev
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: ado-dev
+        env: dev
+    spec:
+      imagePullSecrets: 
+        - name: "<Enter repo credentials>"
+      containers:
+        - name: ado-agent
+          image: ubuntu-ado-agent:latest
+          resources: {}
+          env:
+            - name: AZP_URL
+              value: 'https://dev.azure.com/<Project>'
+            - name: AZP_TOKEN
+              value: '<ENTER_TOKEN>'
+            - name: AZP_POOL
+              value: "<ENTER POOLNAME>"
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        node-role.kubernetes.io/worker: ''
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
