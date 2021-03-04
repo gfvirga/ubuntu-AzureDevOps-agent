@@ -23,11 +23,13 @@ spec:
           resources: {}
           env:
             - name: AZP_URL
-              value: 'https://dev.azure.com/<Project>'
+              value: $AZP_URL
             - name: AZP_TOKEN
-              value: '<ENTER_TOKEN>'
+              value: $AZP_TOKEN
             - name: AZP_POOL
-              value: "<ENTER POOLNAME>"
+              value: $AZP_POOL
+             - name: AZP_AGENT_NAME
+              value: $AZP_AGENT_NAME            
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: IfNotPresent
