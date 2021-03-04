@@ -20,6 +20,13 @@ $ docker run \
 # Running the container in Kubernetes
 - Create a namespace 
 `kubectl create namespace ado-agent`
-- Modify de deployment file with the enviroment variables necessary.
+- Export variables
+```
+export AZP_URL="https://<project>.visualstudio.com"
+export AZP_TOKEN="PAT"
+export AZP_AGENT_NAME="<agentName>"
+export AZP_POOL="<PoolName"
+```
+
 - Deploy 
-`kubectl apply -f ./deployment.yaml`
+`envsubst < deployment.yaml | kubectl apply -f - -n ado-agent`
